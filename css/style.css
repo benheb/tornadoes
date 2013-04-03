@@ -1,0 +1,167 @@
+body {
+  background: url(texture-noise.png);
+  overflow: hidden;
+  margin: 0;
+  font-size: 14px;
+  background:#000000;
+  font-family: "Helvetica Neue", Helvetica;
+}
+
+#header {
+  width: 100%;
+  text-align:center;
+}
+#header h3 {
+  color:#FEFEFE;
+}
+#map {
+  width:900px;
+  height:550px;
+  overflow:hidden;
+  margin:auto;
+  position:relative;
+  margin-top:10px;
+}
+
+#footer {
+  height: 90px;
+  width: 100%;
+  overflow: hidden;
+  z-index: 100;
+  position: absolute;
+  bottom: 0px;
+}
+
+#footer h3 {
+  color:#EEEEEE;
+  width:500px;
+  margin:auto;
+  text-align:center;
+}
+
+
+
+.string, .regexp {
+  color: #f39;
+}
+
+.keyword {
+  color: #00c;
+}
+
+.comment {
+  color: #777;
+  font-style: oblique;
+}
+
+.number {
+  color: #369;
+}
+
+.class, .special {
+  color: #1181B8;
+}
+
+a:link, a:visited {
+  color: #000;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #666;
+}
+
+.hint {
+  position: absolute;
+  right: 0;
+  width: 1280px;
+  font-size: 12px;
+  color: #999;
+}
+
+#info-window {
+  display: none;
+  position: absolute;
+  z-index: 100;
+  width: 220px;
+  padding-top: 5px;
+  padding-right: 0px;
+  text-align: left;
+  color: #FFF;
+  font-size: 15pt;
+  bottom: 0px;
+  margin: 10px;
+  background: #333;
+  opacity: 0.8;
+  padding: 10px;
+}
+
+#info-window span {
+  display:block;
+}
+
+#legend-wrap {
+  position:relative;
+  width:400px;
+  margin:auto;
+  height:40px;
+}
+
+#legend-low {
+  position:absolute;
+  bottom:20px;
+  color:#FFF;
+}
+
+#legend-high {
+  position:absolute;
+  left:358px;
+  bottom:20px;
+  color:#FFF;
+}
+
+#legend {
+  position: absolute;
+  bottom: 20px;
+  left:48px;
+  width: 301px;
+  height: 20px;
+}
+
+.color {
+  width:25px; 
+  height:20px;
+  float:left;
+}
+
+#temp-map-bweather {
+  color:#EEE;
+  position:absolute;
+  bottom:20px;
+  left:10px;
+}
+.county-boundary {
+  stroke:#666;
+}
+.state-boundary {
+  stroke:#666;
+}
+
+.land {
+  stroke:#666;
+}
+
+.counties {
+  stroke:#666;
+}
+
+.scales {
+  cursor:pointer;
+}
+
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
