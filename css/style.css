@@ -6,7 +6,11 @@ body {
   background:#000000;
   font-family: "Helvetica Neue", Helvetica;
 }
-
+#content {
+  width:900px;
+  margin:auto;
+  overflow:hidden;
+}
 #header {
   width: 100%;
   text-align:center;
@@ -24,12 +28,14 @@ body {
 }
 
 #footer {
+  margin-top:40px;
   height: 90px;
   width: 100%;
   overflow: hidden;
   z-index: 100;
-  position: absolute;
   bottom: 0px;
+  text-align:center;
+  color:#999;
 }
 
 #footer h3 {
@@ -63,12 +69,12 @@ body {
 }
 
 a:link, a:visited {
-  color: #000;
+  color: #FEFEFE;
   text-decoration: none;
 }
 
 a:hover {
-  color: #666;
+  color: #888;
 }
 
 .hint {
@@ -79,8 +85,11 @@ a:hover {
   color: #999;
 }
 
+#intro {
+  font-size: 12pt;
+  line-height: 36px;
+}
 #info-window {
-  display: none;
   position: absolute;
   z-index: 100;
   width: 220px;
@@ -108,30 +117,34 @@ a:hover {
 }
 
 #legend-low {
-  position:absolute;
-  bottom:20px;
-  color:#FFF;
+  position: absolute;
+  right: 161px;
+  bottom: 28px;
+  color: #FFF;
 }
 
 #legend-high {
-  position:absolute;
-  left:358px;
-  bottom:20px;
-  color:#FFF;
+  position: absolute;
+  right: 1px;
+  bottom: 28px;
+  color: #FFF;
 }
 
 #legend {
   position: absolute;
-  bottom: 20px;
-  left:48px;
-  width: 301px;
+  bottom: 6px;
+  right: 3px;
+  width: 177px;
   height: 20px;
+  opacity: .8;
 }
 
 .color {
-  width:25px; 
-  height:20px;
-  float:left;
+  width: 20px;
+  height: 20px;
+  float: left;
+  border-radius: 15px;
+  margin-left: 5px;
 }
 
 #temp-map-bweather {

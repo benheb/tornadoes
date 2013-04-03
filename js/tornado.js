@@ -18,10 +18,10 @@
     .domain([1,15])
     .range([1, 40]);
    
-   projection = d3.geo.albers()
+   projection = d3.geo.mercator()
     .rotate([90, 1])
     .center([0,41 ])
-    .scale(2000);
+    .scale(1500);
     
     path = d3.geo.path()
       .projection(projection);
@@ -30,17 +30,46 @@
       .attr("width", width)
       .attr("height", height);
       
+    // mousewheel scroll ZOOM!
+    $('#map').mousewheel(function (event, delta, deltaX, deltaY) {
+      var s = projection.scale();
+      if (delta > 0) {
+        projection.scale(s * 1.1);
+      }
+      else {
+        projection.scale(s * 0.9);
+      }
+      d3.selectAll('.start')
+        .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";});
+      d3.selectAll('.scales')
+        .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";});
+      d3.selectAll('.lines')
+        .attr("x1", function(d) {return projection([d.startLon,d.startLat])[0] })
+        .attr("y1", function(d) {return projection([d.startLon,d.startLat])[1] })
+        .attr("x2", function(d) {return projection([d.endLon,d.endLat])[0] })
+        .attr("y2", function(d) {return projection([d.endLon,d.endLat])[1] });
+          
+      svg.selectAll("path").attr("d", path);
+    });
+    
+    addGeoms();
+    createLegend();
+  }
+  
+  /*
+   * Add countries and state boundaries
+   * TODO: add counties? 
+   * 
+   */  
+  function addGeoms() {
     d3.json("world-110m.json", function(error, world) {
       svg.append("path")
         .datum(topojson.object(world, world.objects.land))
         .attr("class", "land")
         .attr("d", path);
      
-     addCounties();
     });
-  }
     
-  function addCounties() {
     d3.json("http://www.brendansweather.com/data/us.json", function(error, us) {
       svg.insert("path", ".graticule")
           .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
@@ -52,7 +81,7 @@
   
   
   /*
-   * Add cities to the map
+   * Add tornado STARTS to map
    * 
    */
   function getTornadoes() {
@@ -67,6 +96,7 @@
         .enter().append("circle")
           .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";})
           .attr("fill", '#FFF')
+          .attr('class', 'start')
           .attr('r', 1)
           .style("fill-opacity", 1)
           .attr('d', drawLines)
@@ -75,11 +105,20 @@
     
   }
   
+  /*
+   * Draw tornado paths if they exist
+   * 
+   */
   function drawLines( d ) {
     
     if (d.endLat != "-") {
-      var lines = svg.append("line")
+      var lines = svg.append('g');
+      
+      lines.selectAll("line")
+        .data([d])
+      .enter().append('line')
         .style("stroke", '#FFF')
+        .attr('class', 'lines')
         .attr("x1", projection([d.startLon,d.startLat])[0])
         .attr("y1", projection([d.startLon,d.startLat])[1])
         .attr("x2", projection([d.startLon,d.startLat])[0])
@@ -93,6 +132,10 @@
     }    
   }
   
+  /*
+   * Draw circles after paths are drawn, size by F-Scale
+   * 
+   */
   function endCircle( data ) {
     var injuries = svg.append("g")
     
@@ -120,7 +163,10 @@
       .transition()
         .duration(1000)
         .style("fill-opacity", 0.5);
+     
   }
+  
+  
   /*
    * 
    * Interactions - on hover / on exit
@@ -136,115 +182,45 @@
     
   }
   
-  function exit() {
-    d3.selectAll('.hover')
-      .transition()
-        .style("fill-opacity", 0)
-        .duration(2000)
-        .remove();
-    d3.selectAll('.tip-line')
-      .transition()
-        .style("stroke-opacity", 0)
-        .duration(900)
-        .remove();
-    $('#info-window').fadeOut(600);
-  }
-  
   /*
    * 
    * Styler 
    * 
    */
   function styler( data ) {
-    var temp = data.scale;
-    var colors = ["rgb(78,0,0)", "rgb(103,0,31)", "rgb(178,24,43)", "rgb(214,96,77)", "rgb(244,165,130)", "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"] 
+    var strength = data.scale;
+    var colors = [ "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"] 
     colors = colors.reverse();
     var color;
     
     switch ( true ) {
-      case ( temp == 0 ) :
+      case ( strength == 0 ) :
         color = colors[0];
         break;
-      case ( temp < 1 ) :
+      case ( strength < 1 ) :
         color = colors[1];
         break;
-      case ( temp < 2 ) : 
+      case ( strength < 2 ) : 
         color = colors[2]
         break;
-      case ( temp < 3 ) : 
+      case ( strength < 3 ) : 
         color = colors[3]
         break;
-      case ( temp < 4 ) : 
+      case ( strength < 4 ) : 
         color = colors[4]
         break;
-      case ( temp < 5 ) : 
+      case ( strength < 5 ) : 
         color = colors[5]
         break;
-      case ( temp < 6 ) : 
+      case ( strength < 6 ) : 
         color = colors[6]
         break;
     }
     return color;
   }
   
-  /*
-   * Handles rotating globe
-   * 
-   * 
-   */
-  //TODO fix d="" errors when spinning (has to do with clipping?)
-  function setTimer() {
-    d3.timer(function() {
-      var t = Date.now() - t0,
-          o = [λ(450) + velocity[0] * t, φ(450) + velocity[1] * 1];
-          //o = [origin[0] + velocity[0] * t, origin[1] + velocity[1] * t];
-      
-      if (!down) {
-        projection.rotate(o);
-        d3.selectAll("circle")
-          .attr("transform", function(d) {return "translate(" + projection([d.geometry.coordinates[0],d.geometry.coordinates[1]]) + ")";  })
-          .attr('d', updateLine)
-        svg.selectAll("path").attr("d", path);
-      }
-    });
-  }
-  
-  function updateLine(d) {
-    d3.selectAll("line")
-      .attr("x1", projection([d.geometry.coordinates[0],d.geometry.coordinates[1]])[0])
-      .attr("y1", projection([d.geometry.coordinates[0],d.geometry.coordinates[1]])[1])
-  }
-  
-  /*
-   * Steps through cities
-   * 
-   */
-  //TODO only highlight cities that are visible, not clipped
-  function step() {
-    stepInterval = window.setInterval(function() {
-      var i = 0;
-      var len = cities[0].length;
-      var sel = Math.floor((Math.random()*len)+1);
-      
-      d3.select('g').selectAll('path')
-        .attr('d', function(d) {
-          i++;
-          if (i == sel) {
-            hover(d);
-            var city = d3.select(this).data()[0].properties.city;
-            var temp = d3.select(this).data()[0].properties.temperature;
-            svg.selectAll("path").attr("d", path);
-          }
-        });
-    },4000)
-  }
-  
-  /*
-   * Basic legend
-   * 
-   */
   function createLegend() {
-    var colors = ["rgb(78,0,0)", "rgb(103,0,31)", "rgb(178,24,43)", "rgb(214,96,77)", "rgb(244,165,130)", "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"]
+    var colors = [ "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"]
     colors = colors.reverse();
     
     $.each(colors, function(i, color) {
