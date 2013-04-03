@@ -52,7 +52,7 @@
       svg.selectAll("path").attr("d", path);
     });
     
-    addGeoms();
+    addCountries();
     createLegend();
   }
   
@@ -61,15 +61,17 @@
    * TODO: add counties? 
    * 
    */  
-  function addGeoms() {
+  function addCountries() {
     d3.json("world-110m.json", function(error, world) {
       svg.append("path")
         .datum(topojson.object(world, world.objects.land))
         .attr("class", "land")
         .attr("d", path);
-     
+      addStates();
     });
-    
+  }
+  
+  function addStates() {
     d3.json("http://www.brendansweather.com/data/us.json", function(error, us) {
       svg.insert("path", ".graticule")
           .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
@@ -78,7 +80,6 @@
       getTornadoes();
     });
   }
-  
   
   /*
    * Add tornado STARTS to map
