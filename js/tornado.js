@@ -28,7 +28,11 @@
     
     svg = d3.select("#map").append("svg")
       .attr("width", width)
-      .attr("height", height);
+      .attr("height", height)
+      .call(d3.behavior.zoom()
+        .translate(projection.translate())
+        .scale(projection.scale())
+        .on("zoom", redraw));
       
     // mousewheel scroll ZOOM!
     $('#map').mousewheel(function (event, delta, deltaX, deltaY) {
@@ -79,6 +83,28 @@
           .attr("d", path);
       getTornadoes();
     });
+  }
+  
+  function redraw() {
+    if (d3.event) {
+      projection
+          .translate(d3.event.translate)
+          .scale(d3.event.scale);
+    }
+    
+    var t = projection.translate();
+    
+    d3.selectAll('.start')
+      .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";});
+    d3.selectAll('.scales')
+      .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";});
+    d3.selectAll('.lines')
+      .attr("x1", function(d) {return projection([d.startLon,d.startLat])[0] })
+      .attr("y1", function(d) {return projection([d.startLon,d.startLat])[1] })
+      .attr("x2", function(d) {return projection([d.endLon,d.endLat])[0] })
+      .attr("y2", function(d) {return projection([d.endLon,d.endLat])[1] });
+        
+    svg.selectAll("path").attr("d", path);
   }
   
   /*
