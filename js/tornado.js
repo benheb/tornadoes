@@ -7,20 +7,29 @@
     φ,
     λ,
     down,
-    scale, 
+    scale,
+    scales,  
     stepInterval = null;
   
   function init() { 
     var width = 900,
       height = 550;
    
+   scales = {
+     0: 0,
+     1: 0,
+     2: 0,
+     3: 0,
+     4: 0,
+     5: 0
+   }
    scale = d3.scale.linear()
     .domain([1,15])
     .range([1, 40]);
    
    projection = d3.geo.mercator()
     .rotate([90, 1])
-    .center([0,41 ])
+    .center([0,39 ])
     .scale(1500);
     
     path = d3.geo.path()
@@ -57,7 +66,6 @@
     });
     
     addCountries();
-    createLegend();
   }
   
   /*
@@ -126,7 +134,10 @@
           .attr('class', 'start')
           .attr('r', 1)
           .style("fill-opacity", 1)
-          .attr('d', drawLines)
+          .attr('d', function(d) { scales[d.scale]++ } )
+          .attr('d', drawLines);
+        
+        drawScaleBoxes();   
       });
     
     
@@ -158,7 +169,42 @@
           
     }    
   }
-  
+
+  /*
+   * scale boxes for sorting
+   * 
+   */
+  function drawScaleBoxes( d ) {
+    var colors = [ "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"]
+    colors = colors.reverse();
+    
+    $('#f0').html('F0: ' + scales[0]).css('background', colors[ 0 ]);
+    $('#f1').html('F1: ' + scales[1]).css('background', colors[ 1 ]);
+    $('#f2').html('F2: ' + scales[2]).css('background', colors[ 2 ]);
+    $('#f3').html('F3: ' + scales[3]).css('background', colors[ 3 ]);
+    $('#f4').html('F4: ' + scales[4]).css('background', colors[ 4 ]);
+    $('#f5').html('F5: ' + scales[5]).css('background', colors[ 6 ]);
+    
+    $('.scale-box').mouseover(function( e ) {
+      var id = $(this).attr('id').replace(/f/, '');
+      $(this).css('border', '1px solid #FFF');
+      d3.selectAll('.scales')
+        .transition()
+          .duration(100)
+          .attr('r', 0)
+        .transition()
+          .duration(400)
+          .attr("r", function( d ) { if (d.scale == id ) return scale(parseInt(d.scale) + 3) });
+    }).mouseout(function() {
+      $(this).css('border', '1px solid #444');
+      d3.selectAll('.scales')
+        .transition()
+        .duration(500)
+        .attr('r', function( d ) { return scale(parseInt(d.scale))});
+    });
+    
+    
+  }
   /*
    * Draw circles after paths are drawn, size by F-Scale
    * 
@@ -247,6 +293,7 @@
   }
   
   function createLegend() {
+    /*
     var colors = [ "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"]
     colors = colors.reverse();
     
@@ -254,4 +301,5 @@
       var div = '<div class="color" style="background:'+color+'"></div>';
       $('#legend').append(div);
     });
+    */
   }
