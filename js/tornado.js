@@ -46,7 +46,7 @@
       d3.selectAll('.start')
         .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";});
       d3.selectAll('.scales')
-        .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";});
+        .attr("transform", function(d) { return "translate(" + projection([d.endLon,d.endLat]) + ")";});
       d3.selectAll('.lines')
         .attr("x1", function(d) {return projection([d.startLon,d.startLat])[0] })
         .attr("y1", function(d) {return projection([d.startLon,d.startLat])[1] })
@@ -97,7 +97,7 @@
     d3.selectAll('.start')
       .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";});
     d3.selectAll('.scales')
-      .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";});
+      .attr("transform", function(d) { return "translate(" + projection([d.endLon,d.endLat]) + ")";});
     d3.selectAll('.lines')
       .attr("x1", function(d) {return projection([d.startLon,d.startLat])[0] })
       .attr("y1", function(d) {return projection([d.startLon,d.startLat])[1] })
