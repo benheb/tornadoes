@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>A Decade of Tornadoes - Visualized</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+    <script type="text/javascript" src="http://d3js.org/topojson.v0.min.js"></script>
+
+    <script type="text/javascript" src="js/colorbrewer.js"></script>
+    <script type="text/javascript" src="js/jquery-1.7.1.js"></script>
+    <!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>-->
+    
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.css"/>
+    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+    <link type="text/css" rel="stylesheet" href="css/colorbrewer.css"/>
+    <style type="text/css">
+
+    </style>
+  </head>
+  <body>
+    <a href="https://github.com/benheb/tornadoes"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    <div id="header">
+      <h3>A Decade of Tornadoes</h3>
+    </div>
+    <div id="content">
+      <div id="map">
+        <div id="info-window">
+          <span id="intro">The "Super Outbreak" of 1974 spawned 148 tornadoes over 18 hours, over half were classified as F2 or higher. <br />
+            <span style="font-size:9pt; display:block; text-align:center;line-height: 15px;color: #999;">Use mouse to zoom/pan, hover legend for breakdown by EF scale</span>
+          </span>
+        </div> 
+        <div id="scale-sorter" style="display:none">
+          <div id="f0" class="scale-box"></div>
+          <div id="f1" class="scale-box"></div>
+          <div id="f2" class="scale-box"></div>
+          <div id="f3" class="scale-box" style="color:#222"></div>
+          <div id="f4" class="scale-box" style="color:#222"></div>
+          <div id="f5" class="scale-box" style="color:#222"></div>
+        </div>
+       
+      </div>
+      
+      <div id="footer">
+        <span>April 3, 2013  | Data Source: Tornado History Project</span><br />
+        <span style="display: block;overflow: hidden;height: 25px;width: 270px;margin: auto; margin-top:5px">
+          <span style="display: block;float: left;"> by <a href="http://www.brendansweather.com/?post=Mapping_the_Super_Outbreak_of_1974">Brendan's Weather</a> | </span>
+        <span style="float:right"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://benheb.github.com/tornadoes/" data-text="Visualization of April 3-4, 1974 Super Tornado Outbreak #d3js" data-hashtags="tornadoes">Tweet</a></span>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> 
+        </span>
+      </div>
+    </div>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      init();
+    });
+    </script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/mousewheel.js"></script>
+    <script type="text/javascript" src="js/tornado_all.js"></script>
+    
+    <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39863803-1']);
+    _gaq.push(['_trackPageview']);
+  
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  
+  </script>
+  </body>
+</html>
+
