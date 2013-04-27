@@ -29,7 +29,7 @@
    
    projection = d3.geo.mercator()
     .rotate([90, 1])
-    .center([0,37 ])
+    .center([0,36 ])
     .scale(1600);
     
     path = d3.geo.path()
@@ -86,9 +86,20 @@
   function addStates() {
     d3.json("http://www.brendansweather.com/data/us.json", function(error, us) {
       svg.insert("path", ".graticule")
-          .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-          .attr("class", "state-boundary")
-          .attr("d", path);
+        .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+        .attr("class", "state-boundary")
+        .attr("d", path);
+      addCounties();
+    });
+  }
+  
+  function addCounties() {
+    d3.json("data/statecounty_5e6.json", function(error, us) {
+      console.log('try', us)
+      svg.insert("path")
+        .attr("class", "counties")
+        .datum(topojson.mesh(us, us.objects.county, function(a, b) { return a !== b; }))
+        .attr("d", path);
       getTornadoes();
     });
   }
