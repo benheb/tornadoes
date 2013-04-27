@@ -84,7 +84,7 @@
   }
   
   function addStates() {
-    d3.json("http://www.brendansweather.com/data/us.json", function(error, us) {
+    d3.json("data/us.json", function(error, us) {
       svg.insert("path", ".graticule")
         .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
         .attr("class", "state-boundary")
