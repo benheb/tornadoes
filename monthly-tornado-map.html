@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Monthly Tornado Map</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" src="http://d3js.org/topojson.v0.min.js"></script>
+
+    <script type="text/javascript" src="js/colorbrewer.js"></script>
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+    <!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>-->
+    
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.css"/>
+    <link type="text/css" rel="stylesheet" href="css/monthly.css"/>
+    <link type="text/css" rel="stylesheet" href="css/colorbrewer.css"/>
+    <style type="text/css">
+
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <span id="title">Tornado Map</span>
+      <span id="sub-title">Monthy Tornadoes 1950 - 2011</span>
+      <span id="credit"><a href="http://www.twitter.com/brendansweather">@brendansweather</a><br />May, 2013</span>
+    </div>
+    <div id="content">
+      <div id="map">
+        <div id="info-window" style="display:none">
+          <span id="intro">April 25-28, 2011 the largest tornado outbreak ever recorded. In all, the NWS confirmed 358 tornadoes, with 205 touching down on April 27. 
+              Tragically, 348 people were killed as a result of the outbreak.  <br />
+            <span style="font-size:9pt; display:block; text-align:center;line-height: 15px;color: #999;">Use mouse to zoom/pan, hover legend for breakdown by EF scale</span>
+          </span>
+        </div> 
+        <div id="months">
+          <div id="months-inner">
+            <div id="april" class="month-box selected">April</div>
+            <div id="may" class="month-box">May</div>
+            <div id="june" class="month-box">June</div>
+            <div id="july" class="month-box">July</div>
+          </div>
+        </div>
+       
+      </div>
+      
+    </div>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      init();
+    });
+    </script>
+    <script type="text/javascript" src="js/d3.v3.min.js"></script>
+    <script type="text/javascript" src="js/d3.geo.projection.v0.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/mousewheel.js"></script>
+    <script type="text/javascript" src="js/monthly.js"></script>
+    
+    <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39863803-1']);
+    _gaq.push(['_trackPageview']);
+  
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  
+  </script>
+  </body>
+</html>
+

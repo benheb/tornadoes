@@ -1,0 +1,268 @@
+body {
+  background: url(texture-noise.png);
+  overflow: hidden;
+  margin: 0;
+  font-size: 14px;
+  background:#FEFEFE;
+  font-family: "Helvetica Neue", Helvetica;
+}
+#content {
+  width:100%;
+  height:100%;
+  margin:auto;
+  overflow:hidden;
+}
+
+#title {
+  font-weight: bold;
+  font-size: 20pt;
+  margin-left: 15px;
+  color: rgb(0, 165, 255);
+}
+#sub-title {
+  color: #777;
+  display: block;
+  margin-left: 15px;
+}
+#credit {
+  display: block;
+  position: absolute;
+  right: 51px;
+  top: 16px;
+  overflow: hidden;
+  width: 200px;
+  text-align:right;
+  color:#444;
+}
+#header {
+  width: 100%;
+  position:absolute;
+  top:0px;
+  background:#eee;
+  z-index:100;
+  padding:17px;
+  box-shadow: 1px 1px 35px -9px #666;
+}
+#header h3 {
+  color:#444;
+}
+#map {
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  margin:auto;
+  position:relative;
+}
+
+#footer {
+  margin-top:40px;
+  height: 90px;
+  width: 100%;
+  overflow: hidden;
+  z-index: 100;
+  bottom: 0px;
+  text-align:center;
+  color:#999;
+}
+
+#footer h3 {
+  color:#EEEEEE;
+  width:500px;
+  margin:auto;
+  text-align:center;
+}
+
+
+
+.string, .regexp {
+  color: #f39;
+}
+
+.keyword {
+  color: #00c;
+}
+
+.comment {
+  color: #777;
+  font-style: oblique;
+}
+
+.number {
+  color: #369;
+}
+
+.class, .special {
+  color: #1181B8;
+}
+
+a:link, a:visited {
+  color: rgb(33,102,172);
+  text-decoration: none;
+}
+
+a:hover {
+  color: #888;
+}
+
+.hint {
+  position: absolute;
+  right: 0;
+  width: 1280px;
+  font-size: 12px;
+  color: #999;
+}
+
+#intro {
+  font-size: 12pt;
+  line-height: 36px;
+}
+#info-window {
+  position: absolute;
+  z-index: 100;
+  width: 220px;
+  padding-top: 5px;
+  padding-right: 0px;
+  text-align: left;
+  color: #FFF;
+  font-size: 15pt;
+  bottom: 0px;
+  margin: 10px;
+  background: #333;
+  opacity: 0.8;
+  padding: 10px;
+}
+
+#info-window span {
+  display:block;
+}
+
+#legend-wrap {
+  position:relative;
+  width:400px;
+  margin:auto;
+  height:40px;
+}
+
+#legend-low {
+  position: absolute;
+  right: 161px;
+  bottom: 28px;
+  color: #FFF;
+}
+
+#legend-high {
+  position: absolute;
+  right: 1px;
+  bottom: 28px;
+  color: #FFF;
+}
+
+#legend {
+  position: absolute;
+  bottom: 6px;
+  right: 3px;
+  width: 177px;
+  height: 20px;
+  opacity: .8;
+}
+
+.color {
+  width: 20px;
+  height: 20px;
+  float: left;
+  border-radius: 15px;
+  margin-left: 5px;
+}
+
+#temp-map-bweather {
+  color:#EEE;
+  position:absolute;
+  bottom:20px;
+  left:10px;
+}
+
+.states {
+  stroke:#444;
+  fill:#444;
+}
+
+.land {
+  stroke:#999;
+  fill:#444;
+}
+
+.lakes {
+  stroke:#FFFFFF;
+  fill:#FEFEFE;
+}
+
+
+.counties {
+  stroke:#666;
+  fill:#444;
+  stroke-width:0.5px;
+}
+
+.scales {
+  cursor:pointer;
+}
+
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+
+#scale-sorter {
+  position: absolute;
+  bottom: 6px;
+  right: 0px;
+  width: 440px;
+  height: 44px;
+  opacity: .8;
+  color:#FEFEFE;
+}
+
+#scale-sorter div {
+  float: left;
+  margin-right: 10px;
+  border: 1px solid #444;
+  padding: 10px;
+  cursor: pointer;
+}
+
+#months {
+  position: absolute;
+  bottom: 0px;
+  height: 60px;
+  background: #eee;
+  width: 100%;
+  box-shadow: 1px 1px 35px -9px #666;
+}
+
+#months-inner {
+  width:1000px;
+  margin:auto;
+}
+.month-box {
+  float: left;
+  width: 210px;
+  text-align: center;
+  height: 19px;
+  border: 1px solid #FFF;
+  font-weight: bold;
+  color: rgb(0, 165, 255);
+  font-size: 18pt;
+  padding: 17px;
+}
+
+.month-box:hover {
+  background:#FEFEFE;
+  cursor:pointer;
+}
+
+.month-box.selected {
+  background:rgb(77, 77, 77);
+  color:#FFF;
+} 

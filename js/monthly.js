@@ -9,11 +9,13 @@
     down,
     scale,
     scales,  
-    stepInterval = null;
+    stepInterval = null,
+    graphicsLayer;
   
   function init() { 
-    var width = 900,
-      height = 550;
+    var height  = document.height;
+    var width  = document.width;
+   
    
    scales = {
      0: 0,
@@ -27,132 +29,167 @@
     .domain([1,15])
     .range([1, 40]);
    
-   projection = d3.geo.mercator()
-    .rotate([90, 1])
-    .center([0,36 ])
-    .scale(1600);
+
+   projection = d3.geo.mollweide()
+     .scale(1200)
+     .rotate([90])
+     .translate([ width/2, height/2])
+     .center([-5, 37])
+     .precision(0.1)
     
     path = d3.geo.path()
       .projection(projection);
     
     svg = d3.select("#map").append("svg")
-      .attr("width", width)
-      .attr("height", height)
       .call(d3.behavior.zoom()
         .translate(projection.translate())
         .scale(projection.scale())
-        .on("zoom", redraw));
-      
-    // mousewheel scroll ZOOM!
-    $('#map').mousewheel(function (event, delta, deltaX, deltaY) {
-      var s = projection.scale();
-      if (delta > 0) {
-        projection.scale(s * 1.1);
-      }
-      else {
-        projection.scale(s * 0.9);
-      }
-      console.log("d3.selectAll('.start')", d3.selectAll('.start'))
-      d3.selectAll('.start')
-        .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";});
-      d3.selectAll('.scales')
-        .attr("transform", function(d) { return "translate(" + projection([d.endLon,d.endLat]) + ")";});
-      d3.selectAll('.lines')
-        .attr("x1", function(d) {return projection([d.startLon,d.startLat])[0] })
-        .attr("y1", function(d) {return projection([d.startLon,d.startLat])[1] })
-        .attr("x2", function(d) {return projection([d.endLon,d.endLat])[0] })
-        .attr("y2", function(d) {return projection([d.endLon,d.endLat])[1] });
-          
-      svg.selectAll("path").attr("d", path);
+        .on("zoom", zoom));
+        
+    graphicsLayer = svg.append('g');
+    
+    $('.month-box').on('click', function(e) {
+      $('.month-box').removeClass('selected');
+      $(this).addClass('selected');
+      var val = $(this).attr('id');
+      showTornadoes( val );
     });
     
     addCountries();
   }
   
-  /*
-   * Add countries and state boundaries
-   * TODO: add counties? 
-   * 
-   */  
-  function addCountries() {
-    d3.json("world-110m.json", function(error, world) {
-      svg.append("path")
-        .datum(topojson.object(world, world.objects.land))
-        .attr("class", "land")
-        .attr("d", path);
-      addStates();
-    });
-  }
-  
-  function addStates() {
-    d3.json("data/us.json", function(error, us) {
-      svg.insert("path", ".graticule")
-        .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-        .attr("class", "state-boundary")
-        .attr("d", path);
-      addCounties();
-    });
-  }
-  
-  function addCounties() {
-    d3.json("data/statecounty_5e6.json", function(error, us) {
-      console.log('try', us.objects, 'SVG', svg)
-      svg.insert("path")
-        .attr("class", "counties")
-        .datum(topojson.mesh(us, us.objects.county, function(a, b) { return a !== b; }))
-        .attr("d", path);
-      getTornadoes();
-    });
-  }
-  
-  function redraw() {
+  function zoom() {
+    
     if (d3.event) {
       projection
           .translate(d3.event.translate)
           .scale(d3.event.scale);
     }
     
-    var t = projection.translate();
-    
-    d3.selectAll('.start')
+    svg.selectAll("circle")
       .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";});
-    d3.selectAll('.scales')
-      .attr("transform", function(d) { return "translate(" + projection([d.endLon,d.endLat]) + ")";});
-    d3.selectAll('.lines')
-      .attr("x1", function(d) {return projection([d.startLon,d.startLat])[0] })
-      .attr("y1", function(d) {return projection([d.startLon,d.startLat])[1] })
-      .attr("x2", function(d) {return projection([d.endLon,d.endLat])[0] })
-      .attr("y2", function(d) {return projection([d.endLon,d.endLat])[1] });
-        
+    
     svg.selectAll("path").attr("d", path);
+      
+  }
+  
+  /*
+   * Add countries and state boundaries
+   * 
+   */  
+  function addCountries() {
+    
+    d3.json("data/world.json", function(error, world) {
+      console.log('world.objects', world.objects)
+      graphicsLayer.insert("path")
+        .datum(topojson.object(world, world.objects.ne_110m_land))
+        .attr("class", "land")
+        .attr("d", path);
+      
+      graphicsLayer.insert("path")
+        .datum(topojson.object(world, world.objects.states))
+        .attr("class", "states")
+        .attr("d", path);
+        
+      graphicsLayer.insert("path")
+        .datum(topojson.object(world, world.objects.counties))
+        .attr("class", "counties")
+        .attr("d", path);
+        
+      graphicsLayer.insert("path")
+        .datum(topojson.object(world, world.objects.ne_50m_lakes))
+        .attr("class", "lakes")
+        .attr("d", path);
+       
+      getApril( );
+      getMay();
+      getJune();
+      getJuly();
+      
+    });
   }
   
   /*
    * Add tornado STARTS to map
    * 
    */
-  function getTornadoes() {
-    d3.csv("data/tornadodata-6775.csv")
+  function getApril() {
+    d3.csv("data/april-tornadoes.csv")
       .row(function(d) { return {startLat: d.TouchdownLat, startLon: d.TouchdownLon, 
          endLat: d.LiftoffLat, endLon: d.LiftoffLon, scale: d.Fujita, injuries: d.Injuries, damage: d.Damage, state: d.State1, county: d.County1}; })
       .get(function(error, rows) { 
-        tors = svg.append('g');
+        april = svg.append('g');
         
-        tors.selectAll("circle")
+        april.selectAll("circle")
           .data(rows)
-        .enter().append("circle")
+        .enter().insert("circle")
           .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";})
-          .attr("fill", '#FFF')
-          .attr('class', 'start')
+          .attr("fill", styler)
+          .attr('id', 'april')
           .attr('r', 1)
-          .style("fill-opacity", 1)
-          .attr('d', function(d) { scales[d.scale]++ } )
-          .attr('d', drawLines);
-        
-        drawScaleBoxes();   
+          .style("display", "block");
+           
       });
+  }
+  
+  function getMay() {
+    d3.csv("data/may-tornadoes.csv")
+      .row(function(d) { return {startLat: d.TouchdownLat, startLon: d.TouchdownLon, 
+         endLat: d.LiftoffLat, endLon: d.LiftoffLon, scale: d.Fujita, injuries: d.Injuries, damage: d.Damage, state: d.State1, county: d.County1}; })
+      .get(function(error, rows) { 
+        may = svg.append('g');
+        
+        may.selectAll("circle")
+          .data(rows)
+        .enter().insert("circle")
+          .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";})
+          .attr("fill", styler)
+          .attr('id', 'may')
+          .attr('r', 1)
+          .style("display", "none");
+           
+      });
+  }
+
+  function getJune() {     
+    d3.csv("data/june-tornadoes.csv")
+      .row(function(d) { return {startLat: d.TouchdownLat, startLon: d.TouchdownLon, 
+         endLat: d.LiftoffLat, endLon: d.LiftoffLon, scale: d.Fujita, injuries: d.Injuries, damage: d.Damage, state: d.State1, county: d.County1}; })
+      .get(function(error, rows) { 
+        graphicsLayer.selectAll("circle")
+          .data(rows)
+        .enter().insert("circle")
+          .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";})
+          .attr("fill", styler)
+          .attr('id', 'june')
+          .attr('r', 1)
+          .style("display", "none");
+           
+      });
+  }
     
-    
+  function getJuly() {
+    d3.csv("data/july-tornadoes.csv")
+      .row(function(d) { return {startLat: d.TouchdownLat, startLon: d.TouchdownLon, 
+         endLat: d.LiftoffLat, endLon: d.LiftoffLon, scale: d.Fujita, injuries: d.Injuries, damage: d.Damage, state: d.State1, county: d.County1}; })
+      .get(function(error, rows) { 
+        graphicsLayer.selectAll("circle")
+          .data(rows)
+        .enter().insert("circle")
+          .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";})
+          .attr("fill", styler)
+          .attr('id', 'july')
+          .attr('r', 1)
+          .style("display", "none");
+           
+      });
+  }
+  
+  function showTornadoes(val) {
+    svg.selectAll("circle").style('display', "none");
+    svg.selectAll( '#'+val )
+      .style('display', "block")
+      
   }
   
   /*
@@ -282,22 +319,22 @@
       case ( strength == 0 ) :
         color = colors[0];
         break;
-      case ( strength < 1 ) :
+      case ( strength == 1 ) :
         color = colors[1];
         break;
-      case ( strength < 2 ) : 
+      case ( strength == 2 ) : 
         color = colors[2]
         break;
-      case ( strength < 3 ) : 
+      case ( strength == 3 ) : 
         color = colors[3]
         break;
-      case ( strength < 4 ) : 
+      case ( strength == 4 ) : 
         color = colors[4]
         break;
-      case ( strength < 5 ) : 
+      case ( strength == 5 ) : 
         color = colors[5]
         break;
-      case ( strength < 6 ) : 
+      case ( strength == "?" ) : 
         color = colors[6]
         break;
     }
