@@ -1,36 +1,15 @@
-  var velocity = [.008, -.002],
-    t0 = Date.now(),
-    projection,
+  var projection,
     cities,
     svg,
-    path,
-    φ,
-    λ,
-    down,
-    scale,
-    scales,  
-    stepInterval = null,
+    path, 
     graphicsLayer;
   
   function init() { 
     var height  = document.height;
     var width  = document.width;
    
-   
-   scales = {
-     0: 0,
-     1: 0,
-     2: 0,
-     3: 0,
-     4: 0,
-     5: 0
-   }
-   scale = d3.scale.linear()
-    .domain([1,15])
-    .range([1, 40]);
-   
-
-   projection = d3.geo.mollweide()
+   //projection = d3.geo.mollweide()
+   projection = d3.geo.albers()
      .scale(1200)
      .rotate([90])
      .translate([ width/2, height/2])
@@ -58,19 +37,18 @@
     addCountries();
   }
   
+  /* ZOOM */
   function zoom() {
     
     if (d3.event) {
-      projection
-          .translate(d3.event.translate)
-          .scale(d3.event.scale);
+      projection.translate(d3.event.translate).scale(d3.event.scale);
     }
     
     svg.selectAll("circle")
       .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";});
     
     svg.selectAll("path").attr("d", path);
-      
+  
   }
   
   /*
@@ -102,9 +80,6 @@
         .attr("d", path);
        
       getApril( );
-      getMay();
-      getJune();
-      getJuly();
       
     });
   }
@@ -114,205 +89,138 @@
    * 
    */
   function getApril() {
+    /*
+    d3.json("data/tornado.json", function(error, tornadoes) {
+      console.log('tornadoes.april', tornadoes.objects.april)
+      graphicsLayer.insert("path")
+        .datum(topojson.object(tornadoes, tornadoes.objects.april))
+        .attr("class", "april")
+        .style('fill', styler)
+        .attr('d', function() { return path.pointRadius(1) })
+        .attr("d", path);
+      //console.log('topo world!', world);
+    });
+    */
+    
     d3.csv("data/april-tornadoes.csv")
       .row(function(d) { return {startLat: d.TouchdownLat, startLon: d.TouchdownLon, 
          endLat: d.LiftoffLat, endLon: d.LiftoffLon, scale: d.Fujita, injuries: d.Injuries, damage: d.Damage, state: d.State1, county: d.County1}; })
       .get(function(error, rows) { 
-        april = svg.append('g');
+        var april = svg.append('g');
+        
+        $('#april-count').html(rows.length +" tornadoes 1950-2012");
         
         april.selectAll("circle")
           .data(rows)
         .enter().insert("circle")
           .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";})
           .attr("fill", styler)
-          .attr('id', 'april')
+          .attr('id', 'april-tornadoes')
+          .attr('class', 'torns')
           .attr('r', 1)
           .style("display", "block");
-           
+       
+        getJuly();
+        getMay();
+            
       });
   }
   
   function getMay() {
+    console.log('get May')
     d3.csv("data/may-tornadoes.csv")
       .row(function(d) { return {startLat: d.TouchdownLat, startLon: d.TouchdownLon, 
          endLat: d.LiftoffLat, endLon: d.LiftoffLon, scale: d.Fujita, injuries: d.Injuries, damage: d.Damage, state: d.State1, county: d.County1}; })
       .get(function(error, rows) { 
-        may = svg.append('g');
+        var may = svg.append('g');
+        
+        $('#may-count').html(rows.length  +" tornadoes 1950-2012");
         
         may.selectAll("circle")
           .data(rows)
         .enter().insert("circle")
           .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";})
           .attr("fill", styler)
-          .attr('id', 'may')
+          .attr('id', 'may-tornadoes')
+          .attr('class', 'torns')
           .attr('r', 1)
           .style("display", "none");
-           
+       
+       getJune();
+        
       });
   }
 
-  function getJune() {     
+  function getJune() {    
+    console.log('get June') 
     d3.csv("data/june-tornadoes.csv")
       .row(function(d) { return {startLat: d.TouchdownLat, startLon: d.TouchdownLon, 
          endLat: d.LiftoffLat, endLon: d.LiftoffLon, scale: d.Fujita, injuries: d.Injuries, damage: d.Damage, state: d.State1, county: d.County1}; })
-      .get(function(error, rows) { 
-        graphicsLayer.selectAll("circle")
+      .get(function(error, rows) {
+        var june = svg.append('g');
+        
+        $('#june-count').html(rows.length  +" tornadoes 1950-2012");
+        
+        june.selectAll("circle")
           .data(rows)
         .enter().insert("circle")
           .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";})
           .attr("fill", styler)
-          .attr('id', 'june')
+          .attr('id', 'june-tornadoes')
+          .attr('class', 'torns')
           .attr('r', 1)
           .style("display", "none");
-           
+       
+        //getJuly();
       });
   }
     
   function getJuly() {
+    console.log('get July')
     d3.csv("data/july-tornadoes.csv")
       .row(function(d) { return {startLat: d.TouchdownLat, startLon: d.TouchdownLon, 
          endLat: d.LiftoffLat, endLon: d.LiftoffLon, scale: d.Fujita, injuries: d.Injuries, damage: d.Damage, state: d.State1, county: d.County1}; })
-      .get(function(error, rows) { 
-        graphicsLayer.selectAll("circle")
+      .get(function(error, rows) {
+        var july = svg.append('g');
+        
+        $('#july-count').html(rows.length  +" tornadoes 1950-2012");
+        
+        july.selectAll("circle")
           .data(rows)
         .enter().insert("circle")
           .attr("transform", function(d) { return "translate(" + projection([d.startLon,d.startLat]) + ")";})
           .attr("fill", styler)
-          .attr('id', 'july')
+          .attr('id', 'july-tornadoes')
+          .attr('class', 'torns')
           .attr('r', 1)
-          .style("display", "none");
-           
+          .style("display", "none");   
       });
   }
   
+  
+  /*
+   * Toggles visible tornado month
+   * 
+   */
   function showTornadoes(val) {
-    svg.selectAll("circle").style('display', "none");
-    svg.selectAll( '#'+val )
+    $('.torns').hide();
+    svg.selectAll( '#'+val+'-tornadoes' )
       .style('display', "block")
       
   }
   
-  /*
-   * Draw tornado paths if they exist
-   * 
-   */
-  function drawLines( d ) {
-    
-    if (d.endLat != "-") {
-      var lines = svg.append('g');
-      
-      lines.selectAll("line")
-        .data([d])
-      .enter().append('line')
-        .style("stroke", '#FFF')
-        .attr('class', 'lines')
-        .attr("x1", projection([d.startLon,d.startLat])[0])
-        .attr("y1", projection([d.startLon,d.startLat])[1])
-        .attr("x2", projection([d.startLon,d.startLat])[0])
-        .attr("y2", projection([d.startLon,d.startLat])[1])
-        .transition()
-          .duration(2000)
-          .attr("x2", projection([d.endLon,d.endLat])[0])
-          .attr("y2", projection([d.endLon,d.endLat])[1])
-          .each('end', function() { endCircle( d )});
-          
-    }    
-  }
-
-  /*
-   * scale boxes for sorting
-   * 
-   */
-  function drawScaleBoxes( d ) {
-    var colors = [ "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"]
-    colors = colors.reverse();
-    
-    $('#f0').html('F0: ' + scales[0]).css('background', colors[ 0 ]);
-    $('#f1').html('F1: ' + scales[1]).css('background', colors[ 1 ]);
-    $('#f2').html('F2: ' + scales[2]).css('background', colors[ 2 ]);
-    $('#f3').html('F3: ' + scales[3]).css('background', colors[ 3 ]);
-    $('#f4').html('F4: ' + scales[4]).css('background', colors[ 4 ]);
-    $('#f5').html('F5: ' + scales[5]).css('background', colors[ 6 ]);
-    
-    $('.scale-box').mouseover(function( e ) {
-      var id = $(this).attr('id').replace(/f/, '');
-      $(this).css('border', '1px solid #FFF');
-      d3.selectAll('.scales')
-        .transition()
-          .duration(100)
-          .attr('r', 0)
-        .transition()
-          .duration(400)
-          .attr("r", function( d ) { if (d.scale == id ) return scale(parseInt(d.scale) + 3) });
-    }).mouseout(function() {
-      $(this).css('border', '1px solid #444');
-      d3.selectAll('.scales')
-        .transition()
-        .duration(500)
-        .attr('r', function( d ) { return scale(parseInt(d.scale))});
-    });
-    
-    
-  }
-  /*
-   * Draw circles after paths are drawn, size by F-Scale
-   * 
-   */
-  function endCircle( data ) {
-    var injuries = svg.append("g")
-    
-    injuries.selectAll("circle")
-      .data([data])
-    .enter().append('circle')
-      .attr("transform", function(d) { ;return "translate(" + projection([data.endLon,data.endLat]) + ")";})
-      .attr("fill", styler(data))
-      .attr('class', 'scales')
-      .attr('r', function() { return scale(parseInt(data.scale))})
-      .style('fill-opacity', 0)
-      .on('mouseover', function(d) { 
-        d3.select(this)
-          .transition()
-            .duration(300)
-            .attr('r', scale(parseInt(data.scale) + 4))
-            .attr('d', hover);
-      })
-      .on('mouseout', function() {
-        d3.select(this)
-          .transition()
-          .duration(300)
-          .attr('r', scale(parseInt(data.scale)))
-      })
-      .transition()
-        .duration(1000)
-        .style("fill-opacity", 0.5);
-     
-  }
-  
-  
-  /*
-   * 
-   * Interactions - on hover / on exit
-   * 
-   */
-  function hover( d ) {
-    var injuries = d.injuries;
-    var scale = d.scale;
-    var damage = d.damage;
-    var state = d.state;
-    var county = d.county;
-    $('#info-window').html( '<span style="font-weight:bold"> State: ' + state + '</span><br /><span> County: ' + county + '</span><br /><span> Injured: ' + injuries + '</span><br /><span>F-scale: '+ scale + '</span><br /><span> Damage: ' + damage + '</span>').fadeIn(1500);
-    
-  }
   
   /*
    * 
    * Styler 
    * 
    */
-  function styler( data ) {
-    var strength = data.scale;
-    var colors = [ "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"] 
-    colors = colors.reverse();
+  function styler( d ) {
+    var strength = d.scale;
+    //console.log('d', d)
+    //var colors = [ "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"]
+    var colors = [ "#0010A6", "#40BCFF", "#00A64D", "#73FFB4", "#FFBF73", "#A65A00", "transparent"] 
+    //colors = colors.reverse();
     var color;
     
     switch ( true ) {
@@ -339,16 +247,4 @@
         break;
     }
     return color;
-  }
-  
-  function createLegend() {
-    /*
-    var colors = [ "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"]
-    colors = colors.reverse();
-    
-    $.each(colors, function(i, color) {
-      var div = '<div class="color" style="background:'+color+'"></div>';
-      $('#legend').append(div);
-    });
-    */
   }
