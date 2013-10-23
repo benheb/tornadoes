@@ -25,7 +25,7 @@
         .scale(projection.scale())
         .on("zoom", zoom));
         
-    graphicsLayer = svg.append('g');
+    //graphicsLayer = svg.append('g');
     
     $('.month-box').on('click', function(e) {
       $('.month-box').removeClass('selected');
@@ -58,7 +58,20 @@
   function addCountries() {
     
     d3.json("data/world.json", function(error, world) {
+      var land = topojson.object(world, world.objects.land),
+      globe = {type: "Sphere"};
+      context = canvas.node().getContext("2d");
+   
+      context.strokeStyle = '#766951';
+       
+      context.fillStyle = '#d8ffff';
+      context.beginPath(), path.context(context)(globe), context.fill(), context.stroke();
+ 
+      context.fillStyle = '#d7c7ad';
+      context.beginPath(), path.context(context)(land), context.fill(), context.stroke();
+      
       console.log('world.objects', world.objects)
+      /*
       graphicsLayer.insert("path")
         .datum(topojson.object(world, world.objects.ne_110m_land))
         .attr("class", "land")
@@ -78,8 +91,8 @@
         .datum(topojson.object(world, world.objects.ne_50m_lakes))
         .attr("class", "lakes")
         .attr("d", path);
-       
-      getApril( );
+      */
+      //getApril( );
       
     });
   }
@@ -89,18 +102,6 @@
    * 
    */
   function getApril() {
-    /*
-    d3.json("data/tornado.json", function(error, tornadoes) {
-      console.log('tornadoes.april', tornadoes.objects.april)
-      graphicsLayer.insert("path")
-        .datum(topojson.object(tornadoes, tornadoes.objects.april))
-        .attr("class", "april")
-        .style('fill', styler)
-        .attr('d', function() { return path.pointRadius(1) })
-        .attr("d", path);
-      //console.log('topo world!', world);
-    });
-    */
     
     d3.csv("data/april-tornadoes.csv")
       .row(function(d) { return {startLat: d.TouchdownLat, startLon: d.TouchdownLon, 
@@ -248,3 +249,57 @@
     }
     return color;
   }
+  
+/*
+ * 
+ * PATHS
+ * 
+d3.json("data/tornado.json", function(error, tornadoes) {
+      var april = topojson.object(tornadoes, tornadoes.objects.april),
+          may = topojson.object(tornadoes, tornadoes.objects.may),
+          june = topojson.object(tornadoes, tornadoes.objects.june),
+          july = topojson.object(tornadoes, tornadoes.objects.july)
+          
+      graphicsLayer.selectAll('.tornadoes')
+        .data(april.geometries)
+      .enter().append('path')
+        .attr('id', 'april-tornadoes')
+        .attr('class', 'torns')
+        .style('fill', styler)
+        .attr('d', function() { return path.pointRadius(1) })
+        .attr("d", path);
+        
+      graphicsLayer.selectAll('.tornadoes')
+        .data(may.geometries)
+      .enter().append('path')
+        .attr('id', 'may-tornadoes')
+        .attr('class', 'torns')
+        .style('fill', styler)
+        .attr('d', function() { return path.pointRadius(1) })
+        .style('display', 'none')
+        .attr("d", path);
+      
+      graphicsLayer.selectAll('.tornadoes')
+        .data(june.geometries)
+      .enter().append('path')
+        .attr('id', 'june-tornadoes')
+        .attr('class', 'torns')
+        .style('fill', styler)
+        .attr('d', function() { return path.pointRadius(1) })
+        .style('display', 'none')
+        .attr("d", path);
+        
+      graphicsLayer.selectAll('.tornadoes')
+        .data(july.geometries)
+      .enter().append('path')
+        .attr('id', 'july-tornadoes')
+        .attr('class', 'torns')
+        .style('fill', styler)
+        .attr('d', function() { return path.pointRadius(1) })
+        .style('display', 'none')
+        .attr("d", path);
+        
+      
+      //console.log('topo world!', world);
+    });
+    */
