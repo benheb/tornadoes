@@ -2,9 +2,10 @@ body {
   background: url(texture-noise.png);
   overflow: hidden;
   margin: 0;
-  font-size: 14px;
-  background:#000000;
-  font-family: "Helvetica Neue", Helvetica;
+  background:#FFF;
+  font: 17px/28px Georgia;
+  font-family: Lato, 'Helvetica Neue';
+  -webkit-font-smoothing: antialiased;
 }
 #content {
   width:900px;
@@ -13,33 +14,41 @@ body {
 }
 #header {
   width: 100%;
-  text-align:center;
+  text-align: center;
+  z-index: 100;
+  position: absolute;
+  background: rgba(219, 219, 219, 0.5);
+  margin-top: 0px;
 }
-#header h3 {
-  color:#FEFEFE;
+#header h2 {
+  color:#222;
 }
 #map {
-  width:900px;
-  height:550px;
-  overflow:hidden;
-  margin:auto;
-  position:relative;
-  margin-top:10px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  left: 0;
+  position: absolute;
+  top: 0;
 }
 
 #footer {
-  margin-top:40px;
+  margin-top: 40px;
   height: 90px;
   width: 100%;
   overflow: hidden;
   z-index: 100;
   bottom: 0px;
-  text-align:center;
-  color:#999;
+  text-align: center;
+  color: #555;
+  position: absolute;
+  left: 0;
+  background: rgba(219, 219, 219, 0.5);
+  padding-top: 13px;
 }
 
 #footer h3 {
-  color:#EEEEEE;
+  color:#222;
   width:500px;
   margin:auto;
   text-align:center;
@@ -69,12 +78,12 @@ body {
 }
 
 a:link, a:visited {
-  color: #FEFEFE;
+  color: #1d91c0;
   text-decoration: none;
 }
 
 a:hover {
-  color: #888;
+  color:#c7e9b4;
 }
 
 .hint {
@@ -96,13 +105,12 @@ a:hover {
   padding-top: 5px;
   padding-right: 0px;
   text-align: left;
-  color: #FFF;
   font-size: 15pt;
-  bottom: 0px;
+  bottom: 110px;
   margin: 10px;
-  background: #333;
-  opacity: 0.8;
+  background: rgba(219, 219, 219, 0.5);
   padding: 10px;
+  color:#222;
 }
 
 #info-window span {
@@ -158,14 +166,17 @@ a:hover {
 }
 .state-boundary {
   stroke:#666;
+  fill:#F8F8F8;
 }
 
 .land {
   stroke:#666;
+  fill:#F8F8F8;
 }
 
 .counties {
   stroke:#222;
+  fill:#F8F8F8;  
 }
 
 .scales {
@@ -181,12 +192,12 @@ a:hover {
 
 #scale-sorter {
   position: absolute;
-  bottom: 6px;
+  bottom: 120px;
   right: 0px;
-  width: 440px;
+  width: 490px;
   height: 44px;
   opacity: .8;
-  color:#FEFEFE;
+  color: #FEFEFE;
 }
 
 #scale-sorter div {

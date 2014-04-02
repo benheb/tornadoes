@@ -12,8 +12,8 @@
     stepInterval = null;
   
   function init() { 
-    var width = 900,
-      height = 550;
+    var width = document.getElementById("map").clientWidth;
+    var height = window.screen.height;
    
    scales = {
      0: 0,
@@ -24,8 +24,8 @@
      5: 0
    }
    scale = d3.scale.linear()
-    .domain([1,15])
-    .range([1, 40]);
+    .domain([0,5])
+    .range([5, 15]);
    
    projection = d3.geo.mercator()
     .rotate([90, 1])
@@ -155,7 +155,7 @@
       lines.selectAll("line")
         .data([d])
       .enter().append('line')
-        .style("stroke", '#FFF')
+        .style("stroke", '#222')
         .attr('class', 'lines')
         .attr("x1", projection([d.startLon,d.startLat])[0])
         .attr("y1", projection([d.startLon,d.startLat])[1])
@@ -175,8 +175,8 @@
    * 
    */
   function drawScaleBoxes( d ) {
-    var colors = [ "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"]
-    colors = colors.reverse();
+    var colors = ['rgb(254,237,222)','rgb(253,208,162)','rgb(253,174,107)','rgb(253,141,60)','rgb(241,105,19)','rgb(217,72,1)','rgb(140,45,4)']
+    //colors = colors.reverse();
     
     $('#f0').html('F0: ' + scales[0]).css('background', colors[ 0 ]);
     $('#f1').html('F1: ' + scales[1]).css('background', colors[ 1 ]);
@@ -218,6 +218,8 @@
       .attr("transform", function(d) { ;return "translate(" + projection([data.endLon,data.endLat]) + ")";})
       .attr("fill", styler(data))
       .attr('class', 'scales')
+      .attr('stroke', '#FFF')
+      .attr('stroke-width', 0.3)
       .attr('r', function() { return scale(parseInt(data.scale))})
       .style('fill-opacity', 0)
       .on('mouseover', function(d) { 
@@ -235,7 +237,7 @@
       })
       .transition()
         .duration(1000)
-        .style("fill-opacity", 0.5);
+        .style("fill-opacity", 0.8);
      
   }
   
@@ -262,8 +264,10 @@
    */
   function styler( data ) {
     var strength = data.scale;
-    var colors = [ "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"] 
-    colors = colors.reverse();
+    //var colors = [ "rgb(253,219,199)", "rgb(247,247,247)", "rgb(209,229,240)", "rgb(146,197,222)", "rgb(67,147,195)", "rgb(33,102,172)", "rgb(5,48,97)"] 
+    //var colors = [ "#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58" ] 
+    var colors = ['rgb(254,237,222)','rgb(253,208,162)','rgb(253,174,107)','rgb(253,141,60)','rgb(241,105,19)','rgb(217,72,1)','rgb(140,45,4)']
+    //colors = colors.reverse();
     var color;
     
     switch ( true ) {
