@@ -29,7 +29,7 @@
    
    projection = d3.geo.mercator()
     .rotate([90, 1])
-    .center([-10,39 ])
+    .center([5,39 ])
     .scale(1500);
     
     path = d3.geo.path()
