@@ -74,24 +74,39 @@
    * 
    */  
   function addCountries() {
-    d3.json("world-110m.json", function(error, world) {
-      svg.append("path")
-        .datum(topojson.object(world, world.objects.land))
+    d3.json("data/world.json", function(error, world) {
+      svg.append("g")
+        .attr("class", "world")
+      .selectAll("path")
+        .data(topojson.feature(world, world.objects.ne_110m_land).features)
+      .enter().append("path")
         .attr("class", "land")
         .attr("d", path);
+
       addStates();
     });
   }
   
   function addStates() {
-    d3.json("http://www.weather5280.com/data/us.json", function(error, us) {
-      svg.insert("path", ".graticule")
-          .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-          .attr("class", "state-boundary")
-          .attr("d", path);
+    d3.json("data/us.json", function(error, us) {
+      svg.append("path")
+        .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+        .attr("class", "states")
+        .attr("d", path);
+
+      svg.append("g")
+        .attr("id", "counties")
+      .selectAll("path")
+        .data(topojson.feature(us, us.objects.counties).features)
+      .enter().append("path")
+        .attr("class", "county-lines")
+        .attr("d", path);
+
       getTornadoes();
+
     });
   }
+
   
   function redraw() {
     if (d3.event) {
@@ -122,7 +137,7 @@
   function getTornadoes() {
     d3.csv("data/tornadodata-6481.csv")
       .row(function(d) { return {startLat: d.TouchdownLat, startLon: d.TouchdownLon, 
-         endLat: d.LiftoffLat, endLon: d.LiftoffLon, scale: d.Fujita, injuries: d.Injuries, damage: d.Damage, state: d.State1, county: d.County1}; })
+         endLat: d.LiftoffLat, endLon: d.LiftoffLon, scale: d.Fujita, fatalities: d.Fatalities, injuries: d.Injuries, damage: d.Damage, state: d.State1, county: d.County1}; })
       .get(function(error, rows) { 
         tors = svg.append('g');
         
@@ -237,7 +252,7 @@
       })
       .transition()
         .duration(1000)
-        .style("fill-opacity", 0.8);
+        .style("fill-opacity", 0.7);
      
   }
   
@@ -248,12 +263,13 @@
    * 
    */
   function hover( d ) {
+    var fatalities = d.fatalities;
     var injuries = d.injuries;
     var scale = d.scale;
     var damage = d.damage;
     var state = d.state;
     var county = d.county;
-    $('#info-window').html( '<span style="font-weight:bold"> State: ' + state + '</span><br /><span> County: ' + county + '</span><br /><span> Injured: ' + injuries + '</span><br /><span>F-scale: '+ scale + '</span><br /><span> Damage: ' + damage + '</span>').fadeIn(1500);
+    $('#info-window').html( '<span style="font-weight:bold"> State: ' + state + '</span><br /><span> County: ' + county + '</span><br /><span> Fatalities: ' + fatalities + '</span><br /><span> Injured: ' + injuries + '</span><br /><span>F-scale: '+ scale + '</span><br /><span> Damage: ' + damage + '</span>').fadeIn(1500);
     
   }
   

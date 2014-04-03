@@ -165,9 +165,15 @@ a:hover {
 .county-boundary {
   stroke:#666;
 }
-.state-boundary {
+.states{
   stroke:#666;
-  fill:#F8F8F8;
+  stroke-width:1.5;
+  fill:none;
+}
+.county-lines {
+  stroke:#CCC;
+  stroke-width:0.5;
+  fill:none;
 }
 
 .land {
