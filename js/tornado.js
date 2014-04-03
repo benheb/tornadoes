@@ -135,7 +135,7 @@
    * 
    */
   function getTornadoes() {
-    d3.csv("data/tornadodata-6481.csv")
+    d3.csv("data/super-tors.csv")
       .row(function(d) { return {startLat: d.TouchdownLat, startLon: d.TouchdownLon, 
          endLat: d.LiftoffLat, endLon: d.LiftoffLon, scale: d.Fujita, fatalities: d.Fatalities, injuries: d.Injuries, damage: d.Damage, state: d.State1, county: d.County1}; })
       .get(function(error, rows) { 
@@ -149,7 +149,10 @@
           .attr('class', 'start')
           .attr('r', 1)
           .style("fill-opacity", 1)
-          .attr('d', function(d) { scales[d.scale]++ } )
+          .attr('d', function(d) { 
+            if ( d.scale === "5???" ) console.log('d.scale', d.scale);
+            scales[d.scale]++ 
+          } )
           .attr('d', drawLines);
         
         drawScaleBoxes();   
