@@ -108,9 +108,10 @@ a:hover {
   font-size: 15pt;
   bottom: 110px;
   margin: 10px;
-  background: rgba(219, 219, 219, 0.5);
+  background: rgba(219, 219, 219, 0.7);
   padding: 10px;
-  color:#222;
+  color: #222;
+  line-height: 19px;
 }
 
 #info-window span {
