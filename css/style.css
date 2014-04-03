@@ -194,7 +194,7 @@ a:hover {
   position: absolute;
   bottom: 120px;
   right: 0px;
-  width: 490px;
+  width: 420px;
   height: 44px;
   opacity: .8;
   color: #FEFEFE;
@@ -206,4 +206,5 @@ a:hover {
   border: 1px solid #444;
   padding: 10px;
   cursor: pointer;
+  padding:5px;
 }
